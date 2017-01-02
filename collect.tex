@@ -1,0 +1,140 @@
+﻿
+% 20160803
+% 20160806 v2
+% 20170101-20160702 v3
+
+\documentclass[a4paper,UTF8,oneside,twocolumn]{ctexart}
+\usepackage{indentfirst}
+\setlength{\parindent}{0em}
+
+% Constances
+\def\qmqargin{10mm}
+\def\qseprule{0.1pt}
+\def\qfontsize{13}
+
+\usepackage{calc}
+\usepackage{geometry}
+\geometry{left=\qmqargin, right=\qmqargin, top=0cm, bottom=0cm}
+\usepackage{listofitems}
+\setlength{\columnseprule}{\qseprule}
+\setlength{\columnsep}{\qmqargin+\qmqargin}
+
+\usepackage{etoolbox}
+
+\usepackage{tikz}
+
+\newcommand\autoexpand[2]{\ifdefempty{#2}{}{#2#1}}
+\def\edeg{$^\circ$E}
+\def\ndeg{$^\circ$N}
+\def\meter{ m}
+\def\zerowidth{​}
+
+\renewcommand{\normalsize}{\fontsize{\qfontsize}{\qfontsize}\selectfont}
+\catcode`\^^?=12
+
+\def\qlinebreakwith#1{\hfill\linebreak\zerowidth\hskip2em\rm #1.\ \it}
+\usepackage{xstring}
+\newcommand\italicafter[1]{%
+  \expandarg%
+  \StrSubstitute{#1 }{ var. }{\qlinebreakwith{var}}[\qstring]%
+  \StrSubstitute{\qstring}{ subsp. }{\qlinebreakwith{subsp}}%
+}
+
+\def\qline#1#2{%
+	\stepcounter{qarg}%
+	\edef\tmp{\qargin[\arabic{qarg}]}%
+	\textbf{#1}%
+	\parbox[t]{\columnwidth-\widthof{\textbf{#1}}}{\strut\uline{\hskip1em#2\tmp\hfill}\strut}%
+}
+
+\def\qcell#1#2#3{%
+	\stepcounter{qarg}%
+	\edef\tmp{\qargin[\arabic{qarg}]}%
+	\textbf{#1}%
+	\uline{\makebox[\columnwidth*#2/10-\widthof{\textbf{#1}}][c]{#3\tmp}}%
+}
+
+% \usepackage{soul}
+% \setul{1pt}{.4pt}
+% \usepackage{linegoal}
+% \newcommand{\raisedrule}[1]{\rule[#1]{\linegoal}{0.4pt}}
+% \newcommand{\longunderline}[1]{\ul{#1}\raisedrule{-1.4pt}}
+% \newlength\halfnelen
+% \def\qline#1#2{%
+	% \stepcounter{qarg}%
+	% \def\tmp{\qargin[\arabic{qarg}]}%
+	% \textbf{#1}\longunderline{\tmp}%
+% }
+% \def\qcell#1#2#3{%
+	% \stepcounter{qarg}%
+	% \edef\tmp{\qargin[\arabic{qarg}]}%
+	% \setlength\halfnelen{\columnwidth*#2/20-\widthof{\textbf{#1}}/2-\widthof{#3\tmp}/2-0.01pt}%
+	% \def\halfne{\hspace{\halfnelen}}%
+	% \textbf{#1}\ul{\mbox{\halfne#3\tmp\halfne}}%
+% }
+%%% These does not work well for CJK because of the package<soul> can not handle linebreak.
+%%%   CJK can only work in \mbox inside a \ul. 
+%%%   <soul> is not a robust package.
+
+\newcounter{qarg}
+
+\def\qtabsenough{^^?}
+\edef\qtabsenough{\qtabsenough\qtabsenough}
+\edef\qtabsenough{\qtabsenough\qtabsenough}
+\edef\qtabsenough{\qtabsenough\qtabsenough}
+\edef\qtabsenough{\qtabsenough\qtabsenough}
+	  
+\newcommand*{\newlinecommand}[2]{% 
+  \newcommand*{#1}{%
+    \begingroup%
+    \escapechar=`\\%
+    \catcode\endlinechar=\active%
+    \csname\string#1\endcsname%
+  }%
+  \begingroup%
+  \escapechar=`\\%
+  \lccode`\~=\endlinechar%
+  \lowercase{%
+    \expandafter\endgroup
+    \expandafter\def\csname\string#1\endcsname##1~%
+  }{\endgroup#2\space}%
+}
+%%% Not my code but quite NB, I am not quite sure why it works, but it does work.
+%%%   For details, see http://tex.stackexchange.com/questions/10426/def-taking-rest-of-the-line-as-argument
+	  
+\def\qcollect#1{
+	\edef\qlist{#1\qtabsenough}
+	\setsepchar{^^?} 
+	\readlist*\qargin{\qlist}
+	\edef\qloopn{\qargin[5]}
+	\ifdefempty{\qloopn}{\def\qloopn{1}}{}
+	\foreach \rr in {1,...,\qloopn} {
+		\begin{minipage}[c]{\columnwidth}
+			\vskip\qmqargin
+			\setcounter{qarg}{0}
+			\qcell{采集人}{10}{\autoexpand{\hspace{3em}}}
+			\qcell{采集号}{5}{}\qcell{照片号}{5}{}
+			\qcell{采集日期}{6}{}\qcell{标本份数}{4}{}
+			\qline{产地}{}
+			\qcell{经度}{5}{\autoexpand\edeg}\qcell{纬度}{5}{\autoexpand\ndeg}
+			\qcell{海拔}{30/8}{\autoexpand\meter}\qcell{生境}{50/8}{}
+			\qcell{生活型}{9/2}{}\qcell{体高}{11/4}{\autoexpand\meter}\qcell{胸径}{11/4}{\autoexpand\meter}
+			\qcell{科名}{9/2}{}\qcell{中名}{11/2}{}
+			\qline{学名}{\it\italicafter}
+			\qline{附注}{}
+			\vskip\qmqargin
+			\hrule height \qseprule
+		\end{minipage}
+		\filbreak
+	}
+}
+\newlinecommand{\collect}{\qcollect{#1}}
+
+\catcode`\^^I=13
+\def^^I{^^?}
+
+\begin{document}
+
+\collect 杨鱼鱼	4895	4937	2016.8.21	2	河北省承德市兴隆县雾灵山景区盘山路雾灵山主峰西侧段路边	117.481080	40.596553	1996.4	山坡岩石缝	直立草本			牻牛儿苗科	加拿大一枝黄花	Bupleurum sibiricum var. jeholense subsp. shabishabi	 花浅蓝色；未熟果绿色；植株具白色乳汁。
+
+\end{document}
