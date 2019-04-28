@@ -24,10 +24,10 @@ nanicolle 是 LaTeX 格式的一个宏包，当中提供了同名的文档类。
 
 ## 用法
 
-在使用 nanicolle 文档类排版标签之前，必须准备好：
+在使用 nanicolle 文档类排版标签之前，须做好以下准备：
 - 安装好 TeX 的某个发行版；
 - 下载了 nanicolle 宏包；
-- 有一个工作表软件（如 Microsoft Office Excel）。
+- 已经有一个工作表软件（如 Microsoft Office Excel）。
 
 这时，在命令行中输入 `xelatex` 并回车，应该可以看到一点（非平凡的）东西。按 `x` 并回车即可退出。
 
