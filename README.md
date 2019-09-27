@@ -62,7 +62,7 @@ nanicolle 是 LaTeX 格式的一个宏包，当中提供了同名的文档类。
 `nanicolle` 的在线版本自 2018.6.19 起发布于
 - http://www.chinaplantredlist.org/NaniColle/doge.php
 
-其内部版本为 v1.14，和最新 v2.00 不兼容。
+其内部版本为 v1.14，和最新 v2.01 不兼容。
 
 使用在线版本可以免于安装相关的支持程序，在线得到 PDF 标签。
 
