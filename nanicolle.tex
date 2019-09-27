@@ -31,11 +31,17 @@
 \usepackage{rulerbox}
 % \usepackage{url}
 \usepackage{color}
-	\definecolor{darkmiku}{RGB}{19, 149, 139}
+	\definecolor{mikudark}{RGB}{19, 149, 139}
 \usepackage{array}
 	\newcolumntype{+}{>{\global\let\currentrowstyle\relax}}
 	\newcolumntype{^}{>{\currentrowstyle}}
 	\newcommand{\rowstyle}[1]{\gdef\currentrowstyle{#1}#1\ignorespaces}
+\usepackage{enumitem}
+	\setlist[description]{font=\color{mikudark}\bfseries}
+\usepackage{multicol}
+	\setlength\columnsep{2.5em}
+	\setlength\columnseprule{0.4pt}
+\usepackage{adjustbox}
 
 \makeatletter
 \let\url\texttt
@@ -50,7 +56,7 @@
 \def\@ran{\raisebox{.2ex}{\ensuremath{\rangle}}}
 \def\param#1{\textrm{\@lan\textit{#1}\@ran}}
 \def\stopurl{\rlap{\char00}} % WHY URL IS TO GRAB EVERYTHING IT SEES?
-\long\def\cmd#1{{\ttfamily\color{darkmiku}#1}}
+\long\def\cmd#1{{\ttfamily\color{mikudark}#1}}
 \long\def\pbox#1{\leavevmode\parbox{.86\linewidth}{\cmd{#1}}\kern-.03\linewidth}
 \long\edef\[#1\]{$$\noexpand\pbox{\noexpand\raggedright#1\par}$$}
 \catcode`\$=\active 
@@ -76,7 +82,7 @@
 \author{杨宇昌%	
 	\footnote{电子邮箱为\url{yang.yc.allium@gmail.com}\stopurl 。}%
 	\quad〔\textsc{Negimoriya}〕}
-\date{2019年4月28日\qquad ver.~2.00}
+\date{2019年9月27日\qquad ver.~2.01}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -90,7 +96,7 @@
 
 本文介绍的\LaTeX{}文档类\pkgname{nanicolle}可用于植物标本中文采集标签和鉴定标签的排版。两种标签分别用$\string\Collect$命令和$\string\Identify$名称产生。排好的标签可直接打印。
 
-\pkgname{nanicolle}依赖\pkgname{ctex}宏集和\pkgname{graphicx}、\pkgname{geometry}、\pkgname{multicol}、\pkgname{calc}、\pkgname{listofitems}等宏包。目前，\pkgname{nanicolle}文档类仅支持\XeLaTeX{}编译方式。
+\pkgname{nanicolle}依赖\pkgname{ctex}宏集和\pkgname{graphicx}、\pkgname{geometry}、\pkgname{multicol}、\pkgname{calc}、\pkgname{listofitems}、\pkgname{color}、\pkgname{xstring}等宏包。目前，\pkgname{nanicolle}文档类仅支持\XeLaTeX{}编译方式。
 
 \pkgname{nanicolle}按 The \LaTeX{} Project Public License (LPPL) 1.3c 协议\footnote{LPPL 1.3c 协议的详细内容见\url{http://www.latex-project.org/lppl.txt}\stopurl 。}授权。
 
@@ -140,7 +146,7 @@ $\string\Collect$命令的格式为
 	\item $\param{采集日期}$：采集植物材料的日期，可使用$\param{年}.\param{月}.\param{日}$的阿拉伯数字表示。此参数不得为空。
 	\item $\param{科名}$：临时鉴定的科的名称，建议使用中文表示。
 	\item $\param{中文名}$：临时鉴定的植物中文名。
-	\item $\param{学名}$：临时鉴定的植物学名，不带命名人引证。当非空时，可用通式$\param{属级部分}\param{种级部分}\param{种下等级部分}$表示。
+	\item $\param{学名}$：临时鉴定的植物学名，建议不带作者引证。当非空时，可用通式$\param{属级部分}\param{种级部分}\param{种下等级部分}$表示。
 		其中，$\param{属级部分}$有2类结构：
 		\[\clearcnt
 			\ritem{\param{属名}}%
@@ -193,7 +199,7 @@ $\string\Identify$命令的格式为
 
 \begin{enumerate}
 	\item $\param{记录号}$：仅为数据组织方便而设，不在采集标签上出现。
-	\item $\param{学名}$：正式鉴定的植物学名，须带有命名人引证，可用通式$\param{属级部分}\param{种级部分}\param{种下等级部分}\param{命名人引证}$表示。此参数不得为空。
+	\item $\param{学名}$：正式鉴定的植物学名，须带有作者引证，可用通式$\param{属级部分}\param{种级部分}\param{种下等级部分}\param{作者引证}$表示。此参数不得为空。
 	\item $\param{中文名}$：与$\param{学名}$相关联的中文种名。
 	\item $\param{鉴定人}$：标本鉴定者的姓名。
 	\item $\param{鉴定人标准形式}$：标本鉴定者的姓名在分类学上约定的标准形式。此参数与$\param{鉴定人}$不得同时为空。
@@ -258,5 +264,59 @@ $\string\Collect$与$\string\Identify$之所以不遵照\LaTeX{}惯例而用制�
 	\hbox{}\hidewidth\rulerbox{\vbox{\kern-.2pt\hbox{\kern-.2pt\fbox{\includegraphics*[bb=0cm 0cm 14.85cm 21cm]{nanicolle-example.pdf}}\kern-.2pt}\kern-.2pt}}\hidewidth\hbox{}\par
 	\caption{样例PDF文件 \texttt{nanicolle-example.pdf} 的前2栏（左半页）}\label{example}
 \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{更新日志}
+\begin{multicols}{2}
+\begin{description}[style=nextline]
+	\item[ver. 2.01 (2019.9.27)] 
+		改进采集标签中下划线表的实现。\\
+		支持在附注等项目中直接用\LaTeX{}命令如 $\string\textit$ 等控制字体样式。\\
+		合并解析拉丁学名的两处代码，允许在采集标签的学名后引证作者。
+	\item[ver. 2.00 (2019.4.28)] 
+		全部代码重构，打包为文档类，重新命名为\pkgname{nanicolle}。\\
+		新增地图自定义与自动选择功能。\\
+		暂时删去英文采集标签排版功能。\\
+		暂时删去标本条码标签排版功能。\\
+		暂时删去植物所建筑地图。\\
+		开始发布于CTAN和Github上。
+	\item[ver. 1.14 (2018.12.2)]
+		新增 $\textbackslash ifinternal$ 开关，以快速控制条码、照片号、标题等。
+	\item[ver. 1.13 (2018.9.15)]
+		改进采集标签中下划线表的实现。\\
+		修正地图中的国界。\\
+		采集标签中增加植物所建筑地图。\\
+		缩减采集标签中的悬挂缩进量。\\
+		代码模块化。
+	\item[ver. 1.12 (2018.5.15)]
+		优化拉丁学名断行位置。\\
+		调整标本条码标签的段落样式。
+	\item[ver. 1.11 (2018.3.28)]
+		调整原始数据结构。\\
+		鉴定标签中增加命名人标准缩写。
+	\item[ver. 1.10 (2018.2.9)]
+		采集标签中增加东莞市镇街地图。
+	\item[ver. 1.09 (2018.1.28)]
+		实现标本条码标签排版。
+	\item[ver. 1.08 (2017.10.31)]
+		采集标签中增加地理范围为经度 \ensuremath{73\mbox{--}136\,^\circ\mathrm E}、纬度 \ensuremath{17\mbox{--}54\,^\circ\mathrm N}的国界与中国省界地图。
+	\item[ver. 1.07 (2017.10.22)]
+		采集标签与鉴定标签中增加条码。\\
+		实现带有尼泊尔分区地图的英文采集标签排版，用于2017年中国—尼泊尔联合植物考察。
+	\item[ver. 1.06 (2017.10.21)]
+		采集标签中增加标题。
+	\item[ver. 1.05 (2017.7.4)]
+		调整页面布局，使标签尺寸缩小为原来的\ensuremath{\sqrt{2}/2}，与A4台纸相配。\\
+		改进水平切割线的样式。
+	\item[ver. 1.03 (2017.7.2)]
+		参数的表示由\LaTeX{}格式改成TSV格式，方便用电子表格储存。\\
+		此版本曾发布于Github上。
+	\item[ver. 1.02 (2016.8.6)]
+		新造“\raisebox{-0.3pt}{\resizebox{10pt}{8.5pt}{\raisebox{8pt}{\clipbox{0 6.2pt 0 0pt}{苗}}\kern-10pt\relax 杭}}”字。
+	\item[ver. 1.01 (2016.8.3)]
+		实现采集标签与鉴定标签排版。
+\end{description}
+\end{multicols}
 
 \end{document}
