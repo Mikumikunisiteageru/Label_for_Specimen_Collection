@@ -1,5 +1,5 @@
 %% nanicolle.cls
-%% Copyright 2016--2019 Yuchang Yang < yang.yc.allium@gmail.com >
+%% Copyright 2016--2020 Yuchang Yang < yang.yc.allium@gmail.com >
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3c
@@ -16,11 +16,13 @@
 % This work consists of:
 %   - the class file: [nanicolle.cls];
 %   - the illustration files: [point.pdf, ChinaMainland.pdf, Dongguan.pdf];
-%   - the manual files: [nanicolle.tex, nanicolle.pdf, README.md];
-%   - the example files: [nanicolle-example.tex, nanicolle-example.pdf].
+%   - the manual files: [nanicolle-zh.tex, nanicolle-zh.pdf, 
+%                        nanicolle-en.tex, nanicolle-en.pdf, README.md];
+%   - the example files: [nanicolle-example-zh.tex, nanicolle-example-zh.pdf,
+%                         nanicolle-example-en.tex, nanicolle-example-en.pdf].
 %%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{nanicolle}[2019/09/27 v2.01 class nanicolle]
+\ProvidesClass{nanicolle}[2020/07/08 v2.02 class nanicolle]
 % CATCODE PART I
 \makeatletter
 % CLASS OPTIONS
@@ -62,7 +64,7 @@
 \newif\if@drew@map@
 \newif\if@barcodeprepared@
 \newif\if@identifying@
-    \@identifying@false
+  \@identifying@false
 % KERNING AND SPACING
 \def\!{\kern-.0889em\relax}
 \def\:{\kern+.0667em\relax}
@@ -127,23 +129,23 @@
     \kern-1em}\vskip-\ht\@tempboxa\box\@tempboxa\par}
 % UNIT EXPRESSIONS
 \def\degree{\ensuremath{^\circ}}
-\def\gobble@char#1{\relax}
-\def\plus@one@degree#1#2#3{%
+\def\add@degree#1#2#3{%
+  \edef\@arg{#1}%
   \if\relax#1\relax\else
     \ifdim#1\@unit>\z@
-      #1\:\ensuremath{^\circ}\!#2%
+      #1\:\degree\!#2%
     \else
-      \expandafter\gobble@char#1\:\degree\!#3%
+      \expandafter\@gobble\@arg\:\degree\!#3%
     \fi
   \fi}
-\def\plus@one@long#1{\plus@one@degree{#1}EW}
-\def\plus@one@lat#1{\plus@one@degree{#1}NS}
-\def\plus@one@second#1#2{%
+\def\add@long#1{\add@degree{#1}EW}
+\def\add@lat#1{\add@degree{#1}NS}
+\def\add@unit#1#2{%
   \if\relax#1\relax\else
     #1\,#2%
   \fi}
-\def\plus@one@cm#1{\plus@one@second{#1}{cm}}
-\def\plus@one@m#1{\plus@one@second{#1}{m}}
+\def\add@cm#1{\add@unit{#1}{cm}}
+\def\add@m#1{\add@unit{#1}{m}}
 % PARSING
 % LATIN PARSING
 \def\inter@taxon@skip{ \hskip .1667em minus .1667em\relax}
@@ -217,8 +219,7 @@
   \fi\fi
   \if\relax\Collector\relax\@param@enough@false\fi
   \if\relax\ColDate\relax\@param@enough@false\fi
-  \if\relax\Location\relax\@param@enough@false\fi
-  }
+  \if\relax\Location\relax\@param@enough@false\fi}
 \def\det@parse@params#1{%
   \readlist\temp@argin{#1}
   \@param@enough@true
@@ -232,8 +233,7 @@
   \def\temp@name{\Identifier\IdentifierStd}
   \if\relax\LatName\relax\@param@enough@false\fi
   \if\relax\temp@name\relax\@param@enough@false\fi
-  \if\relax\DateIdentification\relax\@param@enough@false\fi
-  }
+  \if\relax\DateIdentification\relax\@param@enough@false\fi}
 % FONT STYLE
 \def\headerstyle{\bfseries}
 \def\headingstyle{\scshape}
@@ -255,8 +255,7 @@
   \expandafter\def\csname#1@longmin\endcsname{#3}%
   \expandafter\def\csname#1@longmax\endcsname{#4}%
   \expandafter\def\csname#1@latmin\endcsname{#5}%
-  \expandafter\def\csname#1@latmax\endcsname{#6}%
-}
+  \expandafter\def\csname#1@latmax\endcsname{#6}}
 % MAP DEFINITIONS
 \mapdef{ChinaMainland}{ChinaMainland.pdf}{73}{136}{17}{54}
 % \mapdef{Dongguan}{Dongguan.pdf}{113.5}{114.26667}{22.63333}{23.16667}
@@ -273,22 +272,21 @@
   \centerline{\hss\rule{.25\paperwidth}{\NC@seprule}\hss}}
 % COMPONENTS OF COLLECTION LABELS
 \RequirePackage{color}
-\def\form@line#1#2{%
-  \par\hangindent=1em%
-  \leavevmode
+\def\if@over@length@or#1#2{%
   \setbox\header@box=\hbox{\headerstyle\white@uline{#1}}%
   \setbox\temp@box=\hbox{\copy\header@box\quad#2}%
-  \def\glue@begin{\quad\hfill}%
-  \def\glue@end{\hfill\hfill\hbox{}}%
   \ifdim\wd\temp@box>\linewidth
-    \def\glue@begin{\CJKglue\quad\CJKglue}%
-    \def\glue@end{}\fi
-  \box\header@box
-    \glue@begin#2\glue@end\par}
+    \par\hangindent=1em\relax
+    \leavevmode\box\header@box\quad\CJKglue#2\par
+  \else}
+\def\form@line#1#2{%
+  \if@over@length@or{#1}{#2}%
+    \leavevmode\box\header@box
+    \quad\hfill#2\hskip\stretch2\null\par\fi}
 \def\form@cell#1#2{%
-  \leavevmode
-  \hbox{\headerstyle\white@uline{#1}}\nobreak
-  \;\hfill#2\hfill\;\hbox{}\penalty-1\relax\ignorespaces}
+  \if@over@length@or{#1}{#2}%  
+    \leavevmode\box\header@box
+    \;\hfill#2\hfill\;\null\penalty-1\relax\ignorespaces\fi}
 \def\heading@line#1{%
   \setbox\temp@box=\hbox{#1}%
   \ifdim\wd\temp@box>\linewidth
@@ -309,9 +307,8 @@
       \heading@line{\headingstyle\@subheading}\fi
     \if@rulerhead
       \nointerlineskip\vskip2pt\relax
-      \centerline{\hbox{}\hss
-        \rulerbox[tb]{\kern-.9mm\rule{6.18cm}{.4pt}\kern-.9mm}%
-        \hss\hbox{}}%
+      \centerline{%
+        \rulerbox[tb]{\kern-.9mm\rule{6.18cm}{.4pt}\kern-.9mm}}%
       \vskip5pt\relax
     \else
       \hrule\@height\NC@seprule
@@ -326,13 +323,13 @@
     \form@cell{采集日期}{\ColDate}%
       \if@internal\form@cell{标本份数}{\NumDup}\fi\par
     \form@line{产地}{\Location}%
-    \form@cell{经度}{\plus@one@long\Longitude}%
-      \form@cell{纬度}{\plus@one@lat\Latitude}\par
-    \form@cell{海拔}{\plus@one@m\Altitude}%
+    \form@cell{经度}{\add@long\Longitude}%
+      \form@cell{纬度}{\add@lat\Latitude}\par
+    \form@cell{海拔}{\add@m\Altitude}%
       \form@cell{生境}{\Habitat}\par
     \form@cell{生活型}{\LifeForm}\penalty-2\relax%
-      \form@cell{体高}{\plus@one@m\Height}%
-      \form@cell{胸径}{\plus@one@cm\DBH}\par
+      \form@cell{体高}{\add@m\Height}%
+      \form@cell{胸径}{\add@cm\DBH}\par
     \form@cell{科名}{\Family}%
       \form@cell{中文名}{\ChnName}\par
     \form@line{学名}{\col@latin{\LatName}}
@@ -354,7 +351,23 @@
   \fi
   \cutting@line}
 \RequirePackage{calc}
-\def\makemap#1{%
+\def\make@map#1{%
+  \setlength\map@x{\wd\csname#1@map\endcsname*%
+    \ratio{\Longitude\@unit-\csname#1@longmin\endcsname\@unit}%
+      {\csname#1@longmax\endcsname\@unit-\csname#1@longmin\endcsname\@unit}}%
+  \setlength\map@y{\ht\csname#1@map\endcsname*%
+    \ratio{\Latitude\@unit-\csname#1@latmin\endcsname\@unit}%
+      {\csname#1@latmax\endcsname\@unit-\csname#1@latmin\endcsname\@unit}}%
+  \begingroup\ooalign{%
+    \copy\csname#1@map\endcsname\cr
+    \hb@xt@\map@x{\hss\vb@xt@\map@y{\copy\pin@point\vss}}\cr}%
+  \endgroup}
+\def\print@map#1{%
+  \vskip3.5mm\relax
+  \make@map{#1}%
+  \vskip\NC@margin
+  \cutting@line}
+\def\choose@map#1{%
   \unless\if@drew@map@
     \if\relax\Longitude\relax\else
     \if\relax\Latitude\relax\else
@@ -362,42 +375,80 @@
     \ifdim\Longitude\@unit<\csname#1@longmax\endcsname\@unit
     \ifdim\Latitude\@unit>\csname#1@latmin\endcsname\@unit
     \ifdim\Latitude\@unit<\csname#1@latmax\endcsname\@unit
-      \setlength\map@x{\wd\csname#1@map\endcsname*%
-        \ratio{\Longitude\@unit-\csname#1@longmin\endcsname\@unit}%
-          {\csname#1@longmax\endcsname\@unit-\csname#1@longmin\endcsname\@unit}}
-      \setlength\map@y{\ht\csname#1@map\endcsname*%
-        \ratio{\Latitude\@unit-\csname#1@latmin\endcsname\@unit}%
-          {\csname#1@latmax\endcsname\@unit-\csname#1@latmin\endcsname\@unit}}
-      \vskip3.5mm\relax
-      \begingroup\ooalign{%
-        \copy\csname#1@map\endcsname\cr
-        \hb@xt@\map@x{\hss\vb@xt@\map@y{\copy\pin@point\vss}}\cr}
-      \endgroup
-      \vskip\NC@margin
-      \cutting@line
+      \print@map{#1}%
       \@drew@map@true
     \fi\fi\fi\fi\fi\fi
   \fi}
+\def\printmap{\ifmap\@for\@tmp:=\map@series\do{\choose@map{\@tmp}}\fi}
+\@drew@map@false
 % \def\map@series{Dongguan,ChinaMainland}
 \def\map@series{ChinaMainland}
 \def\mapseries#1{\def\map@series{#1}}
+\def\loop@the@loop#1{%
+  \loop\ifnum\repeat@cnt>\z@#1%
+  \advance\repeat@cnt-\@ne\repeat}
 \def\@Collect#1{%
-  \@drew@map@false
   \col@parse@params{#1}%
   \if@param@enough@
-    \loop\ifnum\repeat@cnt>\z@
-    \nointerlineskip
-    \begin{minipage}[c]{\linewidth}%
-      \vskip\NC@margin
-      \printheadings
-      \printform
-      \printbarcode
-      \ifmap\@for\@tmp:=\map@series\do{\makemap{\@tmp}}\fi
-    \end{minipage}%
-    \filbreak
-    \advance\repeat@cnt-\@ne\repeat
+    \loop@the@loop{%
+      \nointerlineskip
+      \begin{minipage}[c]{\linewidth}%
+        \vskip\NC@margin
+        \printheadings
+        \printform
+        \printbarcode
+        \printmap
+      \end{minipage}%
+      \filbreak}
   \fi}
 \def@to@eol\Collect\@Collect
+% COLLECTING LABELS IN WESTERN LANGUAGES
+\def\aster{\ensuremath{\ast}\hss}
+\def\printheadings@en{%
+  \if\relax\@heading\relax\else
+    \heading@line{\headingstyle\@heading}
+    \if\relax\@subheading\relax\else
+      \heading@line{\headingstyle\@subheading}\fi
+    \vskip2pt\relax
+    \centerline{\makebox[0.618\linewidth][s]{%
+      \aster\aster\aster\aster\aster\unskip}}
+    \vskip4pt\relax
+  \fi}
+\def\unless@empty#1{%
+  \edef\tmp{#1}%
+  \unless\ifx\tmp\empty}
+\def\right@aligned{\leftskip\fill\rightskip\z@\relax}
+\def\init@punct{\def\the@punct{}}\init@punct
+\def\push@punct#1{\def\the@punct{#1 }}
+\def\pop@punct{\the@punct\initpunct}
+\def\print@tmp#1#2{%
+  \setbox\temp@box=\hbox{#1\hskip0.5em\relax#2}%
+  \ifdim\wd\temp@box>0.85\linewidth
+    #1\;\allowbreak\null\nobreak\hfill#2\par
+  \else\leavevmode\box\temp@box\par\fi}
+\def\printform@en{%
+  \raggedright
+  \unless@empty\Family\textsc{\Family}\par\fi
+  \unless@empty\LatName{\raggedleft\det@latin{\LatName}\par}\fi
+  \parskip=5pt\relax
+  \print@tmp{\Collector}{\#\,\ColNum}%
+  \unless@empty  \ColDate                     \ColDate  \push@punct{;}\fi
+    \unless@empty\Location \pop@punct         \Location \push@punct{,}\fi
+    \unless@empty\Longitude\pop@punct\add@long\Longitude\push@punct{,}\fi
+    \unless@empty\Latitude \pop@punct \add@lat\Latitude \push@punct{,}\fi
+    \unless@empty\Altitude \pop@punct   \add@m\Altitude \space a.s.l.\push@punct{;}\fi
+    \unless@empty\Habitat  \pop@punct         \Habitat                \fi
+    \push@punct{.}\pop@punct\par
+  \unless@empty  \LifeForm                    \LifeForm \push@punct{,}\fi
+    \unless@empty\Height   \pop@punct   \add@m\Height\space height\push@punct{,}\fi
+    \unless@empty\DBH   \pop@punct DBH \add@cm\DBH                    \fi
+    \push@punct{.}\pop@punct\Descr\par}
+\def\@Collect@en#1{{%
+  \let\printheadings\printheadings@en
+  \let\printform\printform@en
+  \@Collect{#1}}}
+\def@to@eol\Collect@en\@Collect@en
+\let\collect\Collect@en
 % COMPONENTS OF IDENTIFICATION LABELS
 \if@det@barcode
   \RequirePackage{qrcode}
@@ -438,6 +489,7 @@
   \fi
   \@identifying@false}
 \def@to@eol\Identify\@Identify
+\let\identify\Identify
 % CATCODES PART III
 \catcode`\&\active
   \def&{et}
