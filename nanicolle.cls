@@ -496,8 +496,8 @@
 \def@to@eol\Identify\@Identify
 % COLLECTING LABELS IN WESTERN LANGUAGES
 \def\@Identify@en#1{{%
-	\let\detchinesestyle\detcommonnamestyle
-	\@Identify{#1}}}
+  \let\detchinesestyle\detcommonnamestyle
+  \@Identify{#1}}}
 \def@to@eol\Identify@en\@Identify@en
 \let\identify\Identify@en
 % CATCODES PART III
