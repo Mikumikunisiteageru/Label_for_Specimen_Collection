@@ -16,10 +16,10 @@
 % This work consists of:
 %   - the class file: [nanicolle.cls];
 %   - the illustration files: [point.pdf, ChinaMainland.pdf, Dongguan.pdf];
-%   - the manual files: [nanicolle-zh.tex, nanicolle-zh.pdf, 
-%                        nanicolle-en.tex, nanicolle-en.pdf, README.md];
-%   - the example files: [nanicolle-example-zh.tex, nanicolle-example-zh.pdf,
-%                         nanicolle-example-en.tex, nanicolle-example-en.pdf].
+%   - the manual files: [nanicolle-doc-zh.tex, nanicolle-doc-zh.pdf, 
+%                        nanicolle-doc-en.tex, nanicolle-doc-en.pdf, README.md];
+%   - the example files: [nanicolle-ex-zh.tex, nanicolle-ex-zh.pdf,
+%                         nanicolle-ex-en.tex, nanicolle-ex-en.pdf].
 %%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{nanicolle}[2020/07/08 v2.02 class nanicolle]
@@ -101,7 +101,6 @@
 \newbox\pin@point
   \setbox\pin@point=\vb@xt@\z@{\vss\hb@xt@\z@{%
     \hss\includegraphics{point.pdf}\hss}\vss}
-% 20190926
 \newdimen\whiterule
 \newdimen\whitevsep
 \newdimen\whitehsep
@@ -170,10 +169,10 @@
   \strsubs{ }{ \upd@shape}%
   \strsubs{subsp.}{\textup{subsp.}\word@cnt\tw@}
   \strsubs{var.}{\textup{var.}\word@cnt\tw@}
-  \strsubs{f.}{\handle@f}
-  \strsubs{sp.}{\upshape sp.\word@cnt\z@}
   \strsubs{cf.}{\textup{cf.}\word@cnt\tw@}
   \strsubs{aff.}{\textup{aff.}\word@cnt\tw@}
+  \strsubs{f.}{\handle@f}
+  \strsubs{sp.}{\upshape sp.\word@cnt\z@}
   \strsubs{et}{\penalty-\@ne et\penalty-\@ne}
   \strsubs{ex}{\penalty-\tw@ et\penalty-\tw@}
   \strsubs{(}{\penalty-\thr@@(}\strsubs{)}{)\penalty-\thr@@}
@@ -239,6 +238,7 @@
 \def\headingstyle{\scshape}
 \def\detlatinstyle{\sffamily\bfseries}
 \def\detchinesestyle{\bfseries}
+\def\detcommonnamestyle{\mdseries}
 \def\identifierstyle{\itshape}
 % INDIVIDUALIZATION
 \def\@herbariumcode{}
@@ -272,28 +272,26 @@
   \centerline{\hss\rule{.25\paperwidth}{\NC@seprule}\hss}}
 % COMPONENTS OF COLLECTION LABELS
 \RequirePackage{color}
-\def\if@over@length@or#1#2{%
-  \setbox\header@box=\hbox{\headerstyle\white@uline{#1}}%
-  \setbox\temp@box=\hbox{\copy\header@box\quad#2}%
-  \ifdim\wd\temp@box>\linewidth
-    \par\hangindent=1em\relax
-    \leavevmode\box\header@box\quad\CJKglue#2\par
-  \else}
+\long\def\length@test#1#2#3#4{%
+  \sbox\temp@box{#1}%
+  \ifdim\wd\temp@box>#2\linewidth\relax#3\else#4\fi}
+\def\form@wrap#1#2{%
+  \sbox\header@box{\headerstyle\white@uline{#1}}%
+  \length@test{\copy\header@box\quad#2}{}%
+    {\par\hangindent=1em\relax
+    \leavevmode\box\header@box\quad\CJKglue#2\par}}
 \def\form@line#1#2{%
-  \if@over@length@or{#1}{#2}%
-    \leavevmode\box\header@box
-    \quad\hfill#2\hskip\stretch2\null\par\fi}
+  \form@wrap{#1}{#2}%
+    {\leavevmode\box\header@box
+    \quad\hfill#2\hskip\stretch2\null\par}}
 \def\form@cell#1#2{%
-  \if@over@length@or{#1}{#2}%  
-    \leavevmode\box\header@box
-    \;\hfill#2\hfill\;\null\penalty-1\relax\ignorespaces\fi}
+  \form@wrap{#1}{#2}%  
+    {\leavevmode\box\header@box
+    \;\hfill#2\hfill\;\null\penalty-1\relax\ignorespaces}}
 \def\heading@line#1{%
-  \setbox\temp@box=\hbox{#1}%
-  \ifdim\wd\temp@box>\linewidth
-    \centerline{\resizebox{\linewidth}{\height}{\box\temp@box}}%
-  \else
-    \centerline{\box\temp@box}%
-  \fi}
+  \length@test{#1}{}%
+    {\centerline{\resizebox{\linewidth}{\height}{\box\temp@box}}}%
+    {\centerline{\box\temp@box}}}
 \if@rulerhead
   \RequirePackage{rulerbox}
     \setlength\rulersep{-.2pt}
@@ -403,6 +401,9 @@
   \fi}
 \def@to@eol\Collect\@Collect
 % COLLECTING LABELS IN WESTERN LANGUAGES
+\def\translation@asl{a.s.l.}
+\def\translation@dbh{DBH}
+\def\translation@tall{tall}
 \def\aster{\ensuremath{\ast}\hss}
 \def\printheadings@en{%
   \if\relax\@heading\relax\else
@@ -414,35 +415,39 @@
       \aster\aster\aster\aster\aster\unskip}}
     \vskip4pt\relax
   \fi}
-\def\unless@empty#1{%
-  \edef\tmp{#1}%
-  \unless\ifx\tmp\empty}
-\def\right@aligned{\leftskip\fill\rightskip\z@\relax}
 \def\init@punct{\def\the@punct{}}\init@punct
 \def\push@punct#1{\def\the@punct{#1 }}
-\def\pop@punct{\the@punct\initpunct}
-\def\print@tmp#1#2{%
-  \setbox\temp@box=\hbox{#1\hskip0.5em\relax#2}%
-  \ifdim\wd\temp@box>0.85\linewidth
-    #1\;\allowbreak\null\nobreak\hfill#2\par
-  \else\leavevmode\box\temp@box\par\fi}
+\def\pop@punct{\the@punct\init@punct}
+\def\unless@empty#1#2#3#4{%
+  \edef\@tmp{#1}%
+  \unless\ifx\@tmp\empty
+    \pop@punct#2#1#3\push@punct{#4}\fi}
+\def\print@col@num#1#2{%
+  \length@test{#1\hskip0.7em\relax#2}{0.85}%
+    {#1\hskip0.7em\relax\allowbreak\null\nobreak\hfill#2}%
+    {\leavevmode\box\temp@box}\par}
+\def\capitalize@one#1{\uppercase{#1}}
+\def\capitalize@first#1{%
+  \edef\@tmp{#1}%
+  \expandafter\capitalize@one\@tmp}
 \def\printform@en{%
   \raggedright
-  \unless@empty\Family\textsc{\Family}\par\fi
-  \unless@empty\LatName{\raggedleft\det@latin{\LatName}\par}\fi
+  \unless@empty{\Family}{\textsc}{}{}\par
+  {\leftskip2em\relax\hangindent1em\relax
+    \unless@empty{\LatName}{\det@latin}{}{}\par}
   \parskip=5pt\relax
-  \print@tmp{\Collector}{\#\,\ColNum}%
-  \unless@empty  \ColDate                     \ColDate  \push@punct{;}\fi
-    \unless@empty\Location \pop@punct         \Location \push@punct{,}\fi
-    \unless@empty\Longitude\pop@punct\add@long\Longitude\push@punct{,}\fi
-    \unless@empty\Latitude \pop@punct \add@lat\Latitude \push@punct{,}\fi
-    \unless@empty\Altitude \pop@punct   \add@m\Altitude \space a.s.l.\push@punct{;}\fi
-    \unless@empty\Habitat  \pop@punct         \Habitat                \fi
-    \push@punct{.}\pop@punct\par
-  \unless@empty  \LifeForm                    \LifeForm \push@punct{,}\fi
-    \unless@empty\Height   \pop@punct   \add@m\Height\space height\push@punct{,}\fi
-    \unless@empty\DBH   \pop@punct DBH \add@cm\DBH                    \fi
-    \push@punct{.}\pop@punct\Descr\par}
+  \print@col@num{\Collector}{\#\,\ColNum}%
+  \unless@empty{\ColDate}{\capitalize@first}{}{;}%
+    \unless@empty{\Location}{}{}{,}%
+    \unless@empty{\Longitude}{\add@long}{}{,}%
+    \unless@empty{\Latitude}{\add@lat}{}{,}%
+    \unless@empty{\Altitude}{\add@m}{ \translation@asl}{}\push@punct{;}%
+    \unless@empty{\Habitat}{}{}{}\push@punct{.}\pop@punct\par
+  \unless@empty{\LifeForm}{\capitalize@first}{}{,}%
+    \unless@empty{\Height}{\add@m}{ \translation@tall}{,}%
+    \unless@empty{\DBH}{\translation@dbh\space\add@cm}{}{.}\push@punct{.}\pop@punct%
+    \Descr\par
+  \parskip\z@}
 \def\@Collect@en#1{{%
   \let\printheadings\printheadings@en
   \let\printform\printform@en
@@ -489,7 +494,12 @@
   \fi
   \@identifying@false}
 \def@to@eol\Identify\@Identify
-\let\identify\Identify
+% COLLECTING LABELS IN WESTERN LANGUAGES
+\def\@Identify@en#1{{%
+	\let\detchinesestyle\detcommonnamestyle
+	\@Identify{#1}}}
+\def@to@eol\Identify@en\@Identify@en
+\let\identify\Identify@en
 % CATCODES PART III
 \catcode`\&\active
   \def&{et}
