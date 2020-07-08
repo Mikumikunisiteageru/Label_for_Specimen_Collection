@@ -101,9 +101,9 @@
 
 \parskip=1ex\relax
 
-Herbarium specimens are plant material well preserved as samples of plant populations. The plant material itself is insufficient to reflect all important information of the population, so it is required to prepare a fully recorded \emph{collecting label} along with the material. Plant taxonomists may study a herbarium specimen and determine which species the population belongs to, and such comments are presented on \emph{identifying labels} and then pasted on the specimen sheet.
+Herbarium specimens are plant material well preserved as samples of plant populations. The plant material itself is insufficient to reflect all important information of the population, so it is required to prepare a fully recorded \emph{collection label} along with the material. Plant taxonomists may study a herbarium specimen and determine which species the population belongs to, and such comments are presented on \emph{identification labels} and then pasted on the specimen sheet.
 
-\pkgname{nanicolle} is a \LaTeX\ document class for typesetting collecting and identifying labels for herbarium specimens, in Chinese style or in western style using English. Labels mentioned hereinafter are by default in western style, which uses a really different layout from the Chinese version (see the Chinese manual for details). Collecting and identifying labels can be typeset by macros $\string\collect$ and $\string\identify$ (NB: both lower case!) respectively. The output file can be printed on A4 papers (\ensuremath{297\times210} mm). 
+\pkgname{nanicolle} is a \LaTeX\ document class for typesetting collection and identification labels for herbarium specimens, in Chinese style or in western style using English. Labels mentioned hereinafter are by default in western style, which uses a really different layout from the Chinese version (see the Chinese manual for details). Collection and identification labels can be typeset by macros $\string\collect$ and $\string\identify$ (NB: both lower case!) respectively. The output file can be printed on A4 papers (\ensuremath{297\times210} mm). 
 
 Documents in this class can only be compiled with \XeLaTeX{}.
 
@@ -127,16 +127,16 @@ etc.
 
 A document in the \pkgname{nanicolle} class should be a plain text file with the extension \texttt{.tex}. The document generally should consist of the five following parts:
 \begin{enumerate}
-	\item Document class loader, i.e. $\string\documentclass[\param{option list}]\{nanicolle\}$. $\param{option}$s seperated by comma $,$ in the $\param{option list}$ control the behavior of the document. For example, $nomap$ suppresses the map in the collecting labels, and $autoduplicate$ repeats the collecting labels according to the $\param{duplicate count}$ (vide infra). When no $\param{option}$ is specified, one can simply write $\string\documentclass\{nanicolle\}$ instead.
-	\item Optional $\string\heading\{\param{heading}\}$ and $\string\subheading\{\param{subheading}\}$ in the preamble to customize content of the headings on each collecting label. Both the length of $\param{heading}$ and $\param{subheading}$ should not exceed the line width. One can make a one-line heading by skipping the $\string\subheading$. If both $\string\heading$ and $\string\subheading$ are skipped, no heading will occur on the collecting labels.
+	\item Document class loader, i.e. $\string\documentclass[\param{option list}]\{nanicolle\}$. $\param{option}$s seperated by comma $,$ in the $\param{option list}$ control the behavior of the document. For example, $nomap$ suppresses the map on collection labels, and $autoduplicate$ repeats the collection labels according to their $\param{duplicate count}$s (vide infra). When no $\param{option}$ is specified, one can simply write $\string\documentclass\{nanicolle\}$ instead.
+	\item Optional $\string\heading\{\param{heading}\}$ and $\string\subheading\{\param{subheading}\}$ in the preamble to customize content of the headings on each collection label. Both the length of $\param{heading}$ and $\param{subheading}$ should not exceed the line width. One can make a one-line heading by skipping the $\string\subheading$. If both $\string\heading$ and $\string\subheading$ are skipped, no heading will occur on the collection labels.
 	\item $\string\begin\{document\}$, as the name implies.
-	\item Lines starting with either $\string\collect$ or $\string\identify$ to typeset collecting or identifying labels respectively. Syntaxes of these macros will be declared in Section~\ref{collect} and Section~\ref{identify}. 
+	\item Lines starting with either $\string\collect$ or $\string\identify$ to typeset collection or identification labels respectively. Syntaxes of these macros will be declared in Section~\ref{collect} and Section~\ref{identify}. 
 	\item $\string\end\{document\}$.
 \end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{The macro $\textbackslash collect$ for collecting labels}\label{collect}
+\section{The macro $\textbackslash collect$ for collection labels}\label{collect}
 
 The syntax of the macro $\string\collect$ is
 \[%
@@ -154,12 +154,12 @@ Parameters can be left empty (some cannot), but even so the tabs seperating them
 The requirements of each parameter of $\string\collect$ are listed as follows. 
 
 \begin{enumerate}
-	\item $\param{record number}$: Only for the convenience of data organizing, not printed on collecting label.
+	\item $\param{record number}$: Only for the convenience of data organizing, not printed on collection label.
 	\item $\param{collectors}$: Names of the persons or the team who collected the specimen. When there were more than one collectors, all their names should be listed here. When a team was involved, it is strongly suggested to list its members' names in parentheses after the team name. $\param{collectors}$ \textsl{cannot} be empty. 
 	\item $\param{collecting number}$: Serial number indexing the specimen collection of the first component of $\param{collectors}$. Traditionally it is suggested to apply sequences of increasing integers starting from 1 to $\param{collecting number}$.
-	\item $\param{collecting date}$: Date when the specimen was collected, better expressed in arabic numerals in the formula $\param{year}.\param{month}.\param{date}$. Parameter $\param{collecting date}$ \textsl{cannot} be empty. 
+	\item $\param{collecting date}$: Date when the specimen was collected, better expressed in arabic numerals following the formula $\param{year}.\param{month}.\param{date}$. Parameter $\param{collecting date}$ \textsl{cannot} be empty. 
 	\item $\param{family}$: Preliminary scientific name (in Latin) of the family.
-	\item $\param{vernacular name}$: Preliminary vernacular name of the species, in local language. Not printed on collecting label.
+	\item $\param{vernacular name}$: Preliminary vernacular name of the species, in local language. Not printed on collection label.
 	\item $\param{scientific name}$: Preliminary scientific name (in Latin) of the species, better with no author citation especially when uncertain. Unless empty, $\param{scientific name}$ follows the fomula $\param{generic part}\param{specific part}\param{infraspecific part}$. \par
 		In the formula above, there are two possible patterns for the $\param{generic part}$:
 		\[\clearcnt
@@ -184,8 +184,8 @@ The requirements of each parameter of $\string\collect$ are listed as follows.
 			\ritem{\uspace f.\uspace\param{form epithet}}%
 			\ritem{\uspace '\param{cultivar name}'}*\]
     Control sequences like $\string\textit$ manually designating font style are unavailable in $\param{scientific name}$.
-	\item $\param{photo number}$: Only for the convenience of data organizing, not printed on collecting label.
-	\item $\param{duplicate count}$: Count of specimen duplicates with the same $\param{collecting number}$, expressed in arabic numerals; not printed on collecting label. When $autoduplicate$ is loaded as an $\param{option}$ of the document class, each $\string\collect$ macro automatically makes $\param{duplicate count}$ duplicate collecting labels.
+	\item $\param{photo number}$: Only for the convenience of data organizing, not printed on collection label.
+	\item $\param{duplicate count}$: Count of specimen duplicates with the same $\param{collecting number}$, expressed in arabic numerals; not printed on collection label. When $autoduplicate$ is loaded as an $\param{option}$ of the document class, each $\string\collect$ macro automatically makes $\param{duplicate count}$ duplicate collection labels.
 	\item $\param{location}$: Location where the specimen was collected, expressed in natural way, providing as much detailed information as possible, including country, province, city, town, etc., and the specific locality (probably with respect to some landmarks), so that other researchers can locate the population. $\param{location}$ \textsl{cannot} be empty.
 	\item $\param{longitude}$: Longitude value of the $\param{location}$, a decimal floating number in degree (without unit), positive for east, negative for west. Sexagesimal expression (in degree, minute, and second) are not acceptable.
 	\item $\param{latitude}$: Latitude value of the $\param{location}$, a decimal floating number in degree (without unit), positive for north, negative for south. Sexagesimal expression (in degree, minute, and second) are not acceptable.
@@ -198,11 +198,11 @@ The requirements of each parameter of $\string\collect$ are listed as follows.
 \end{enumerate}
 
 \def\degree{\kern0.1ex\ensuremath{^\circ}}
-By default, when preparing a collecting label, \pkgname{nanicolle} typesets a map below the main body of the label, illustrating the position of the coordinates, given that the $\param{longitude}$ lies between 73\degree E and 136\degree E, and the $\param{latitude}$ lies between 17\degree N and 54\degree N. One can load a $nomap$ $\param{option}$ into the document class (Section~\ref{usage}) to suppress the typesetting of maps. It is also possible to redefine the geographic range of the maps. 
+By default, when preparing a collection label, \pkgname{nanicolle} typesets a map below the main body of the label, illustrating the position of the coordinates, given that the $\param{longitude}$ lies between 73\degree E and 136\degree E, and the $\param{latitude}$ lies between 17\degree N and 54\degree N. One can load a $nomap$ $\param{option}$ into the document class (Section~\ref{usage}) to suppress the typesetting of maps. It is also possible to redefine the geographic range of the maps. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{The macro $\textbackslash identify$ for identifying labels}\label{identify}
+\section{The macro $\textbackslash identify$ for identification labels}\label{identify}
 
 The syntax of the macro $\string\identify$ is
 \[%
@@ -217,7 +217,7 @@ Parameters can be left empty unless specialized, but the tabs seperating them ca
 The requirements of each parameter of $\string\identify$ are listed as follows. 
 
 \begin{enumerate}
-	\item $\param{record number}$: Only for the convenience of data organizing, not printed on identifying label.
+	\item $\param{record number}$: Only for the convenience of data organizing, not printed on identification label.
 	\item $\param{scientific name}$: Scientific name with author citation of the species that the identification yielded, following the formula $\param{generic part}\param{specific part}\param{infraspecific part}\uspace\param{author citation}$. As that of $\string\collect$, macros for manually manipulating font style are unavailable here either. $\param{scientific name}$ \textsl{cannot} be empty.
 	\item $\param{vernacular name}$: Common name associated with $\param{scientific name}$ of the species.
 	\item $\param{identifier}$: Full name of the identifier.
@@ -226,7 +226,7 @@ The requirements of each parameter of $\string\identify$ are listed as follows.
 	\item $\param{comment}$: Comment about the identification worth mention. Different from other parameters of $\string\identify$, $\param{comment}$ is a complete sentence (unless empty), so that the leading letter of the first word should be capitalized, and a punctuation (usually period) is required at the end.
 \end{enumerate}
 
-The $\string\identify$ macro has no $\param{duplication count}$ parameter, so identifying label will not be automatically repeated. When repeating is wanted, one has to repeat the lines with $\string\identify$ manually.
+The $\string\identify$ macro has no $\param{duplication count}$ parameter, so identification label will not be automatically repeated. When repeating is wanted, one has to repeat the lines with $\string\identify$ manually.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -234,7 +234,7 @@ The $\string\identify$ macro has no $\param{duplication count}$ parameter, so id
 
 \subsection{Store original data in a spreadsheet software}
 
-Using tabs $\tab$ as delimiters between parameters is not the convention of \LaTeX{}. This special rule for delimiters was designed to make \pkgname{nanicolle} able to read the plain text lines from a spreadsheet software\footnote{Microsoft Office Excel is an instance of spreadsheet software.}. When some rows of cells are pasted from a spreadsheet software to plain text environment, it is automatically converted to TSV (Tab-Separated Values) format --- rows/lines are separated by end-of-line character(s), and cells within a row/line are separated by tab. This mechanism allows users to establish a database for collecting or identifying records in a spreadsheet software (as Table~\ref{table}). When one wants to print labels according to certain records, he/she can simply copy the involved rows from the database, paste them in a \LaTeX{} source file, and then call \pkgname{nanicolle} to deal with them. Databases can also contain extra information after the parameters required, which will be ignored by $\string\collect$ or $\string\identify$ and will not affect the output. 
+Using tabs $\tab$ as delimiters between parameters is not the convention of \LaTeX{}. This special rule for delimiters was designed to make \pkgname{nanicolle} able to read the plain text lines from a spreadsheet software\footnote{Microsoft Office Excel is an instance of spreadsheet software.}. When some rows of cells are pasted from a spreadsheet software to plain text environment, it is automatically converted to TSV (Tab-Separated Values) format --- rows/lines are separated by end-of-line character(s), and cells within a row/line are separated by tab. This mechanism allows users to establish a database for collection or identification records in a spreadsheet software (as Table~\ref{table}). When one wants to print labels according to certain records, he/she can simply copy the involved rows from the database, paste them in a \LaTeX{} source file, and then call \pkgname{nanicolle} to deal with them. Databases can also contain extra information after the parameters required, which will be ignored by $\string\collect$ or $\string\identify$ and will not affect the output. 
 
 \begin{table}[htbp]
 	\centering
@@ -245,7 +245,7 @@ Using tabs $\tab$ as delimiters between parameters is not the convention of \LaT
 		\string\collect & 2 & Foo, Bar & 3142 & \ensuremath{\cdots} \\\hline
 		\string\collect & 3 & Foo, Bar & 3143 & \ensuremath{\cdots} \\\hline
 	\end{tabular}
-	\caption{A sample of database for collecting records in a spreadsheet database}\label{table}
+	\caption{A sample of database for collection records in a spreadsheet database}\label{table}
 \end{table}
 
 \subsection{Set the printer correctly}
@@ -256,7 +256,7 @@ Before the PDF file from \pkgname{nanicolle} is sent to a printer, it is necessa
 
 \section{Change history}
 
-\pkgname{nanicolle} was originally designed for making Chinese collecting labels and identifying labels, with its first version completed on 2016/8/3 (ver. 1.01). Later on 2017/10/22 (ver. 1.07), the typesetting of western style collecting labels was carried out for an international plant expedition, and that was the first version with maps. The macro for collection labels in western style had been temporarily hidden since 2019.4.28 (ver. 2.00), until rewritten and republished on 2020.7.8 (ver. 2.02). 
+\pkgname{nanicolle} was originally designed for making Chinese collection labels and identification labels, with its first version completed on 2016/8/3 (ver. 1.01). Later on 2017/10/22 (ver. 1.07), the typesetting of western style collection labels was carried out for an international plant expedition, and that was the first version with maps. The macro for collection labels in western style had been temporarily hidden since 2019.4.28 (ver. 2.00), until rewritten and republished on 2020.7.8 (ver. 2.02). 
 For more details, please refer to the Chinese manual \texttt{nanicolle-zh.PDF}. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
