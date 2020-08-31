@@ -29,6 +29,7 @@
 
 \usepackage[top=32mm,bottom=32mm,textwidth=39em]{geometry}
 \usepackage{marvosym}
+\usepackage{fontspec}
 \usepackage{metalogo}
 \usepackage{rulerbox}
 \usepackage{array}
@@ -37,14 +38,14 @@
 	\newcommand{\rowstyle}[1]{\gdef\currentrowstyle{#1}#1\ignorespaces}
 \usepackage{enumitem}
 	\setlist[description]{font=\color{mikudark}\bfseries,leftmargin=2em}
-\usepackage{multicol}
-	\setlength\columnsep{3em}
-	\setlength\columnseprule{0.4pt}
-\usepackage{adjustbox}
+% \usepackage{multicol}
+	% \setlength\columnsep{3em}
+	% \setlength\columnseprule{0.4pt}
+% \usepackage{adjustbox}
 \usepackage{nth}
 \usepackage{tikz}
 \usepackage{color}
-	\definecolor{mikudark}{RGB}{19, 149, 139}
+	\definecolor{mikudark}{RGB}{19,149,139}
 \newbox\mynmy
 \sbox\mynmy{%
 	\smash{\raisebox{-5mm}{\begin{tikzpicture}[x=7mm,y=7mm]
@@ -90,7 +91,7 @@
 \author{\zh{杨宇昌} (Yuchang \textsc{Yang})%	
 	\footnote{Email address: \url{yang.yc.allium@gmail.com}\stopurl.}%
 	\qquad \box\mynmy\kern-1cm}
-\date{July \nth{8}, 2020\qquad ver.~2.02}
+\date{August \nth{31}, 2020\qquad ver.~2.03y}
 \frenchspacing 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -149,7 +150,7 @@ The syntax of the macro $\string\collect$ is
 		\tab\param{altitude}\tab\param{habitat}\tab\param{life form}%
 		\tab\param{height}\tab\param{diameter at breast height}\tab\param{note}%
 \]
-where $\tab$ denotes a horizontal tab (U+0009, the character that the tab key inputs). Each $\string\collect$ macro followed by its parameters must exclusively occupy a single line without comment sign, and the line should begin immediately with the macro. 
+where $\tab$ denotes a horizontal tab (U+0009, the character that the tab key inputs). Each $\string\collect$ macro followed by its parameters must exclusively occupy a single line. 
 Parameters can be left empty (some cannot), but even so the tabs seperating them should never be omitted. 
 The requirements of each parameter of $\string\collect$ are listed as follows. 
 
@@ -263,7 +264,7 @@ For more details, please refer to the Chinese manual \texttt{nanicolle-zh.PDF}.
 
 \section{A full example using \pkgname{nanicolle}}
 
-The following is a full example file using document class \pkgname{nanicolle}. It can be found as \texttt{nanicolle-ex-en.tex} in the package. To display it more clearly, the $\uspace$ denotion for space is no longer used in this example. Actual lines correspond with line numbers in the left. An actual line may be so long that it is wrapped here, just as in text editors, but remember, these wrapped parts in fact belong to a single line, as there is no end-of-line character in between. 
+The following is a full example file using document class \pkgname{nanicolle}. It can be found as \texttt{nanicolle-ex-en.tex} in the package. To display it more clearly, the $\uspace$ mark for space is no longer used in this example. Actual lines correspond with line numbers in the left. An actual line may be so long that it is wrapped here, just as in text editors, but remember, these wrapped parts in fact belong to a single line, as there is no end-of-line character in between. 
 
 \begingroup
 \catcode`\^^I\active\let^^I\tab

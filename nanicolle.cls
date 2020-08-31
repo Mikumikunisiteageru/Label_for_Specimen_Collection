@@ -22,7 +22,7 @@
 %                         nanicolle-ex-en.tex, nanicolle-ex-en.pdf].
 %%
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{nanicolle}[2020/07/08 v2.02 class nanicolle]
+\ProvidesClass{nanicolle}[2020/08/31 v2.03y class nanicolle]
 % CATCODE PART I
 \makeatletter
 % CLASS OPTIONS
@@ -51,11 +51,9 @@
 \chardef\tw@=2
 \chardef\thr@@=3
 \chardef\f@ur=4
-\chardef\@other=12
 \chardef\Identify@len=8
 \chardef\Collect@len=19
 % CONSTANT CHARACTER AND STRINGS
-\def\space{ }
 \def\@unit{pt}
 \def\vb@xt@{\vbox to}
 % CATCODE PART II
@@ -87,8 +85,8 @@
 % PAGE LAYOUT
 \RequirePackage{graphicx}
 \RequirePackage{geometry}
-  \geometry{paperwidth=297mm, paperheight=210mm, 
-    left=\NC@margin, right=\NC@margin, top=\z@, bottom=\z@}
+  \geometry{paperwidth=297mm,paperheight=210mm, 
+    left=\NC@margin,right=\NC@margin,top=\z@,bottom=\z@}
 \RequirePackage{multicol}
   \setlength\columnsep{2\NC@margin}
   \setlength\columnseprule{\NC@seprule}
@@ -174,7 +172,7 @@
   \strsubs{f.}{\handle@f}
   \strsubs{sp.}{\upshape sp.\word@cnt\z@}
   \strsubs{et}{\penalty-\@ne et\penalty-\@ne}
-  \strsubs{ex}{\penalty-\tw@ et\penalty-\tw@}
+  \strsubs{ex}{\penalty-\tw@ ex\penalty-\tw@}
   \strsubs{(}{\penalty-\thr@@(}\strsubs{)}{)\penalty-\thr@@}
   \strsubs{×}{\ensuremath{\mathsf{\times}}\word@cnt\@ne\ignorespaces}
   {\itshape\@tempstring}}
@@ -186,8 +184,9 @@
   \latin@parse{#1}}
 \RequirePackage{listofitems}
   \reademptyitems
-  \catcode`\^^I\@other
+  \@makeother\^^I
   \setsepchar{^^I}
+  \catcode`\^^I=10\relax
 \def\get@argin#1{%
   \ifnum#1>\temp@arginlen\relax
     \else\temp@argin[#1]\fi}
@@ -261,9 +260,13 @@
 % \mapdef{Dongguan}{Dongguan.pdf}{113.5}{114.26667}{22.63333}{23.16667}
 % FULL LINE COMMAND TRICK
 \begingroup
-  \catcode`\^^M\@other%
+  \@makeother\^^M%
   \gdef\def@to@eol#1#2{%
-    \gdef#1{\begingroup\catcode`\^^M\@other\csname\string#1\endcsname}%
+    \gdef#1{%
+      \begingroup%
+      \def\dospecials{\do\^^M\do\^^I\do\%\do\$\do\#\do\~}%
+      \def\do{\@makeother}\dospecials%
+      \csname\string#1\endcsname}%
     \expandafter\gdef\csname\string#1\endcsname##1^^M{#2{##1}\endgroup}}%
 \endgroup
 % COMPONENTS IN COMMON
@@ -330,7 +333,7 @@
       \form@cell{胸径}{\add@cm\DBH}\par
     \form@cell{科名}{\Family}%
       \form@cell{中文名}{\ChnName}\par
-    \form@line{学名}{\col@latin{\LatName}}
+    {\form@line{学名}{\col@latin{\LatName}}\par}%
     \form@line{附注}{\Descr}}
   \nointerlineskip}
 \if@col@barcode
@@ -400,7 +403,7 @@
       \filbreak}
   \fi}
 \def@to@eol\Collect\@Collect
-% COLLECTING LABELS IN WESTERN LANGUAGES
+% COLLECTING LABELS IN WESTERN STYLE
 \def\translation@asl{a.s.l.}
 \def\translation@dbh{DBH}
 \def\translation@tall{tall}
@@ -494,7 +497,7 @@
   \fi
   \@identifying@false}
 \def@to@eol\Identify\@Identify
-% COLLECTING LABELS IN WESTERN LANGUAGES
+% COLLECTING LABELS IN WESTERN STYLE
 \def\@Identify@en#1{{%
   \let\detchinesestyle\detcommonnamestyle
   \@Identify{#1}}}
